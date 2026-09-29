@@ -32,50 +32,76 @@ $Itens = @{
     15251 = 'Juba do Devorador de Almas'
     15253 = 'Espírito Dourado'
     15257 = 'Lâmina do Leão Frenético'
-    15258 = 'Placa de Ferro das Trevas'
-    15260 = 'Chifre do Lacaio Maligno'
+    15258 = 'Armadura de Ferro da Escuridão'
+    15260 = 'Chifre Longo do Escravo Demônio'
     15261 = 'Chifre do Cavalo de Feng'
-    15262 = 'Mão da Feiticeira'
-    15263 = 'Orbe da Mãe Sagrada'
+    15262 = 'Mão da Mulher Demônio'
+    15263 = 'Jóia da Sagrada Mãe'
     15265 = 'Poeira Estelar'
     15267 = 'Antena do Devorador de Almas'
-    15268 = 'Armadura da Besta Gigante'
+    15268 = 'Carapaça da Grande Besta'
     15269 = 'Roda das Sete Luminárias'
     15270 = 'Pedra Astral'
     15271 = 'Chifre do Demônio Ancestral'
     15272 = 'Poeira do Demônio'
-    15274 = 'Aura da Mãe Sagrada'
+    15273 = 'Carapaça do Escravo Fantasma'
+    15274 = 'Diadema da Sagrada Mãe'
+    15276 = 'Casco da Grande Besta'
     15277 = 'Poder das Sete Luminárias'
     15278 = 'Alma do Demônio Ancestral'
-    15280 = 'Fragmentos das Trevas'
-    15281 = 'Fio do Machado do Lacaio Maligno'
-    15282 = 'Pinças Gigantes das Trevas'
-    15283 = 'Adorno de Cabeça da Feiticeira'
-    15284 = 'Coração Ardente do Lacaio Maligno'
-    15285 = 'Pedra da Mãe Sagrada'
-    15286 = 'Aura da Feiticeira'
-    15287 = 'Poder do Senhor Fantasma'
-    15288 = 'Coração da Mãe Sagrada'
-    15289 = 'Aura Negra da Besta Gigante'
-    15290 = 'Aura Sombria do Senhor Fantasma'
-    15291 = 'Chifre Carmesim da Besta Gigante'
-    15292 = 'Orbe de Skaidread'
-    15293 = 'Lâmina de Skaidread'
+    15280 = 'Armadura da Escuridão'
+    15281 = 'Lâmina-Machado do Fantasma'
+    15282 = 'Ferramentas da Escuridão'
+    15283 = 'Coroa da Mulher Demônio'
+    15284 = 'Coração de Fogo do Fantasma'
+    15285 = 'Pedra Espiritual da Sagrada Mãe'
+    15286 = 'Energia da Mulher Demônio'
+    15287 = 'Poder do Rei Fantasma'
+    15288 = 'Coração da Sagrada Mãe'
+    15289 = 'Hálito Negro da Grande Besta'
+    15290 = 'Seda Dourada do Rei Fantasma'
+    15291 = 'Chifre Rubro da Grande Besta'
+    15292 = 'Jóia Verdejante'
+    15293 = 'Lâmina Verdejante'
     15294 = 'Máscara Fantasma de Tsu'
-    15295 = 'Pedra do Ministro'
-    15296 = 'Vontade do Monarca'
-    15297 = 'Chicote de Seda de Tsuchun'
-    15298 = 'Fonte da Ilusão'
-    15299 = 'Alma da Feiticeira'
-    15300 = 'Proteção do Senhor Fantasma'
-    15301 = 'Pegada da Besta Gigante'
-    15302 = 'Imagem das Costas do Império'
-    15303 = 'Alma Sombria de Tsuchun'
-    15304 = 'Suspiro do Império'
-    15305 = 'Asas Flamejantes de Tsuchun'
-    15306 = 'Pedra do Senhor da Ilusão'
-    15307 = 'Pedra da Ilusão'
+    15295 = 'Selo do Ministro'
+    15296 = 'Espírito Guerreiro do Rei'
+    15297 = 'Chicote de Seda Pura'
+    15298 = 'Fonte Espelhada Ilusória'
+    15299 = 'Alma da Mulher Demônio'
+    15300 = 'Bainha do Rei Fantasma'
+    15301 = 'Alma da Grande Besta'
+    15302 = 'Destino do Crepúsculo'
+    15303 = 'Alma Pura da Escuridão'
+    15304 = 'Remorso do Crepúsculo'
+    15305 = 'Asas Puras Brilhantes'
+    15306 = 'Marca do Senhor das Ilusões'
+    15307 = 'Pedra dos Sonhos'
+    15308 = 'Símbolo do Crepúsculo'
     15309 = 'Máscara Dourada'
+    15310 = 'Cetro do Poder do Crepúsculo'
+    15311 = 'Espírito do Céu e da Terra'
+}
+
+# Raridade dos itens do Capítulo 3 (gold = amarelo, red = vermelho na tabela oficial)
+$Raros = @{
+    # gold (nomes em amarelo na tabela oficial)
+    15273 = 'gold'  # Carapaça do Escravo Fantasma (90)
+    15274 = 'gold'  # Diadema da Sagrada Mãe (90)
+    15276 = 'gold'  # Casco da Grande Besta (90)
+    15299 = 'gold'  # Alma da Mulher Demônio (99)
+    15300 = 'gold'  # Bainha do Rei Fantasma (99)
+    15301 = 'gold'  # Alma da Grande Besta (99)
+    15302 = 'gold'  # Destino do Crepúsculo (99)
+    15303 = 'gold'  # Alma Pura da Escuridão (99)
+    15304 = 'gold'  # Remorso do Crepúsculo (99)
+    15305 = 'gold'  # Asas Puras Brilhantes (99)
+    15306 = 'gold'  # Marca do Senhor das Ilusões (99)
+    15307 = 'gold'  # Pedra dos Sonhos (99)
+    # red (nomes em vermelho na tabela oficial)
+    15309 = 'red'   # Máscara Dourada (100)
+    15310 = 'red'   # Cetro do Poder do Crepúsculo (100)
+    15311 = 'red'   # Espírito do Céu e da Terra (100)
 }
 
 $Cache = @{}
@@ -125,18 +151,21 @@ function Montar-Pagina([string]$ref) {
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
 <title>Contador de drops</title>
 <style>
-  body { font-family: Arial, sans-serif; max-width: 640px; margin: 24px auto; padding: 0 16px; color: #222; }
-  h1 { font-size: 22px; margin-bottom: 8px; }
-  .info { color: #555; font-size: 14px; margin: 12px 0; line-height: 1.6; }
-  .aviso { background: #fff4d6; border: 1px solid #e0c060; padding: 8px 12px; border-radius: 4px; font-size: 14px; }
-  table { border-collapse: collapse; width: 100%; }
-  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #ddd; }
-  td.qtd, th.qtd { text-align: right; font-weight: bold; }
-  select { font-size: 15px; padding: 4px 8px; }
+  html, body { background: #000; }
+  body { font-family: Arial, sans-serif; max-width: 640px; margin: 24px auto; padding: 0 16px; color: #fff; }
+  .aviso { background: #1a1a1a; border: 1px solid #555; padding: 8px 12px; border-radius: 4px; font-size: 16px; }
+  table { border-collapse: collapse; margin-top: 16px; font-size: 20px; }
+  th, td { text-align: left; padding: 4px 0; }
+  td.qtd, th.qtd { text-align: right; font-weight: bold; padding-left: 24px; }
+  .bolinha { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 10px; vertical-align: middle; }
+  .bolinha.gold { background: #f5c542; }
+  .bolinha.red { background: #ff4d4d; }
+  select { font-size: 18px; padding: 4px 8px; background: #000; color: #fff; border: 1px solid #555; border-radius: 4px; }
+  label { font-size: 18px; }
 </style></head><body>
-<h1>Drops no Dusk — PW 1.2.6</h1>
 '@)
 
     # Filtro de semana
@@ -149,6 +178,7 @@ function Montar-Pagina([string]$ref) {
         [void]$sb.Append("<option value='$(Esc $x.ref)'$sel>$(Esc $x.label)</option>")
     }
     [void]$sb.Append('</select></label>')
+
 
     if ($r.Erro) {
         [void]$sb.Append("<p class='aviso'>Não consegui consultar a API agora ($(Esc $r.Erro)). ")
@@ -166,22 +196,18 @@ function Montar-Pagina([string]$ref) {
                 [pscustomobject]@{ Id = [int]$_.Name; Qtd = [int]$_.Value }
             } | Sort-Object Qtd -Descending
         }
-        $total = ($lista | Measure-Object Qtd -Sum).Sum
-        if (-not $total) { $total = 0 }
-
-        [void]$sb.Append("<div class='info'>Personagem: <b>$(Esc $l.name)</b> · Posição: <b>$(Esc $l.position)</b> · Pontos: <b>$(Esc $l.score)</b> · Total de itens: <b>$total</b><br>")
-        [void]$sb.Append("Ranking atualizado pelo servidor em: $(Esc $r.Dados.updated_at)<br>")
-        [void]$sb.Append("Consultado por este script às: $('{0:HH:mm:ss}' -f $r.Hora)")
-        [void]$sb.Append(' (aperte F5 para consultar de novo)')
-        [void]$sb.Append('</div>')
+        $lista = @($lista)
+        # Mostra somente os itens raros (gold e red)
+        $lista = @($lista | Where-Object { $Raros.ContainsKey($_.Id) })
 
         if ($lista.Count -eq 0) {
-            [void]$sb.Append('<p>Nenhum drop registrado ainda nesta semana.</p>')
+            [void]$sb.Append('<p>Nenhum item gold ou red nesta semana.</p>')
         } else {
             [void]$sb.Append('<table><tr><th>Item</th><th class="qtd">Quantidade</th></tr>')
             foreach ($i in $lista) {
                 $nome = if ($Itens.ContainsKey($i.Id)) { $Itens[$i.Id] } else { "Item $($i.Id)" }
-                [void]$sb.Append("<tr><td>$(Esc $nome)</td><td class='qtd'>$($i.Qtd)</td></tr>")
+                $bolinha = "<span class='bolinha $($Raros[$i.Id])' title='$($Raros[$i.Id])'></span>"
+                [void]$sb.Append("<tr><td>$bolinha$(Esc $nome)</td><td class='qtd'>$($i.Qtd)</td></tr>")
             }
             [void]$sb.Append('</table>')
         }

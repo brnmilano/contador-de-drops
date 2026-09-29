@@ -1,6 +1,6 @@
 # Contador de drops — The Classic PW 1.2.6 (Dusk)
 
-Mostra, no navegador, os itens que um personagem dropou no ranking **Dusk** do [The Classic PW 1.2.6](https://ranking.theclassic.games/pw126/dusk), com o nome e a quantidade de cada item, semana a semana.
+Mostra, no navegador, os itens **raros (gold e red)** que um personagem dropou no ranking **Dusk** do [The Classic PW 1.2.6](https://ranking.theclassic.games/pw126/dusk), com o nome e a quantidade de cada item, semana a semana.
 
 Os dados vêm da API pública do ranking. O contador só consulta a API quando você abre a página ou aperta **F5**.
 
@@ -16,7 +16,7 @@ Os dados vêm da API pública do ranking. O contador só consulta a API quando v
    - **Sem Git:** clique em **Code → Download ZIP** aqui no GitHub e extraia a pasta.
 2. Dê dois cliques em **`iniciar.bat`**.
 3. Abrem três coisas: uma janela preta (o servidor), o guia `COMO-USAR.txt` e o navegador em **http://localhost:8765**.
-4. Aperte **F5** para atualizar e use o filtro **Semana** para ver semanas anteriores.
+4. Aperte **F5** para atualizar e use o filtro **Semana** para ver semanas anteriores. A lista mostra só os itens gold e red, com uma bolinha dourada ou vermelha antes do nome.
 5. Para encerrar, feche a janela preta.
 
 O passo a passo completo, inclusive como conferir os valores, está no [`COMO-USAR.txt`](COMO-USAR.txt).
@@ -51,7 +51,7 @@ Os arquivos `drops_fizzkoko.html` e `fizzkoko_dusk_semanal.json` são um retrato
 
 ## Observações
 
-- **Nomes dos itens:** vêm do [Perfect World Database](https://www.pwdatabase.com/) (versão internacional) e foram traduzidos livremente. Podem não bater exatamente com os nomes do jogo. Itens desconhecidos aparecem como `Item <ID>`.
-- **Pontos e total de itens:** cada item vale 1 ponto, exceto a **Pedra do Senhor da Ilusão (15306)**, que vale 20. Por isso os dois números podem ser diferentes.
+- **Nomes dos itens:** os itens do Capítulo 3 (Ópera do Crepúsculo) usam os nomes oficiais do servidor. Os dos capítulos 1 e 2 são tradução livre do [Perfect World Database](https://www.pwdatabase.com/) (versão internacional) e podem não bater com os nomes do jogo. Itens desconhecidos aparecem como `Item <ID>`.
+- **Raridade:** a lista mostra só os itens gold e red do Capítulo 3 (Ópera do Crepúsculo). Os itens comuns e os dos capítulos 1 e 2 não aparecem.
 - **Uso da API:** o ranking é atualizado periodicamente pelo próprio site. Apertar F5 várias vezes seguidas não traz dados novos, só gera carga no servidor deles.
 - **Projeto não oficial:** não tem ligação com o The Classic Games.

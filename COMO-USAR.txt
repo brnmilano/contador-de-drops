@@ -38,21 +38,19 @@ funcionando normalmente.
 3. O QUE A PAGINA MOSTRA
 --------------------------------------------------------------
 
-  No topo:
-    - Personagem, Posicao no ranking, Pontos e Total de itens.
-    - "Ranking atualizado pelo servidor em": horario da ultima
-      coleta feita pelo proprio site do The Classic.
-    - "Consultado por este script as": horario em que o contador
-      buscou os dados pela ultima vez.
+  - No topo: o filtro "Semana".
+  - Abaixo: a tabela com os itens raros dropados na semana
+    (gold e red), com nome e quantidade, da maior para a menor
+    quantidade. Os itens comuns nao aparecem.
+  - A bolinha antes do nome mostra a raridade:
+      bolinha dourada  = gold dusk
+      bolinha vermelha = red dusk
 
-  Na tabela:
-    - Nome de cada item dropado e a quantidade, da maior para a
-      menor quantidade.
+  Se aparecer "Nenhum item gold ou red nesta semana", ele nao
+  dropou nenhum item raro naquela semana.
 
-  Observacao sobre os pontos:
-    Cada item vale 1 ponto, exceto a "Pedra do Senhor da Ilusao",
-    que vale 20. Por isso Pontos e Total de itens podem ser
-    diferentes.
+  Obs.: a classificacao de raridade vale para os itens do
+  Capitulo 3 (Opera do Crepusculo).
 
 
 --------------------------------------------------------------
@@ -65,9 +63,9 @@ funcionando normalmente.
   - Cada consulta aparece registrada na janela preta, assim:
         [17:10:32] Consultando API (semana: atual, nome: FizzKoko)
   - Lembre que o site do The Classic so atualiza o ranking de
-    tempos em tempos. Se o horario de "Ranking atualizado pelo
-    servidor" nao mudou, os numeros tambem nao vao mudar.
-    Nao adianta apertar F5 varias vezes seguidas.
+    tempos em tempos. Entre uma atualizacao e outra do site, os
+    numeros nao mudam. Nao adianta apertar F5 varias vezes
+    seguidas.
 
 
 --------------------------------------------------------------
@@ -100,9 +98,9 @@ funcionando normalmente.
     Abra no navegador:
     https://ranking.theclassic.games/index.php?__route=api/entries&game=pw126&ranking=dusk&period=weekly&ref=&page=1&q=FizzKoko&class=&sort=position&dir=asc
 
-    Procure o trecho "extra":{"items":{ ... }}. Cada par
-    "ID": quantidade deve bater com a tabela do contador.
-    Exemplo: "15284": 10  =  Coracao Ardente do Lacaio Maligno: 10
+    Procure o trecho "extra":{"items":{ ... }}. Para os IDs dos
+    itens raros, a quantidade deve bater com a do contador.
+    Exemplo: "15306": 1  =  Marca do Senhor das Ilusoes: 1
 
     Para uma semana fechada, troque "ref=" por "ref=2026-W39"
     (ou a semana desejada). Da semana 36 para tras, troque
@@ -110,8 +108,9 @@ funcionando normalmente.
 
   Opcao B - No site oficial:
     https://ranking.theclassic.games/pw126/dusk
-    Selecione "Semanal" e procure o FizzKoko. Posicao e Pontos
-    devem ser os mesmos do contador.
+    Selecione "Semanal", procure o FizzKoko e clique na linha
+    dele para ver os itens. As quantidades devem ser as mesmas
+    do contador.
 
 
 --------------------------------------------------------------
