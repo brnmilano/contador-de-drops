@@ -1,0 +1,150 @@
+==============================================================
+  CONTADOR DE DROPS (Dusk, PW 1.2.6)
+  Guia de uso
+==============================================================
+
+Este arquivo abre automaticamente sempre que voce executa o
+iniciar.bat. Pode fechar quando quiser; o contador continua
+funcionando normalmente.
+
+
+--------------------------------------------------------------
+1. O QUE TEM NA PASTA C:\contador-de-drops
+--------------------------------------------------------------
+
+  iniciar.bat                 -> Abre o contador. E o unico arquivo
+                                 que voce precisa clicar.
+  contador.ps1                -> O servidor local (PowerShell) que
+                                 consulta o ranking e monta a pagina.
+  COMO-USAR.txt               -> Este guia.
+  drops_fizzkoko.html         -> Copia fixa do historico (semanas
+                                 22 a 40), sem atualizacao.
+  fizzkoko_dusk_semanal.json  -> Os mesmos dados do historico em JSON.
+
+
+--------------------------------------------------------------
+2. COMO INICIAR
+--------------------------------------------------------------
+
+  1) De dois cliques em "iniciar.bat".
+  2) Abre uma janela preta (o servidor) e, junto, este guia.
+  3) O navegador abre sozinho em:  http://localhost:8765
+     Se nao abrir, digite esse endereco no navegador.
+  4) IMPORTANTE: deixe a janela preta aberta enquanto usar o
+     contador. Se ela for fechada, a pagina para de funcionar.
+
+
+--------------------------------------------------------------
+3. O QUE A PAGINA MOSTRA
+--------------------------------------------------------------
+
+  No topo:
+    - Personagem, Posicao no ranking, Pontos e Total de itens.
+    - "Ranking atualizado pelo servidor em": horario da ultima
+      coleta feita pelo proprio site do The Classic.
+    - "Consultado por este script as": horario em que o contador
+      buscou os dados pela ultima vez.
+
+  Na tabela:
+    - Nome de cada item dropado e a quantidade, da maior para a
+      menor quantidade.
+
+  Observacao sobre os pontos:
+    Cada item vale 1 ponto, exceto a "Pedra do Senhor da Ilusao",
+    que vale 20. Por isso Pontos e Total de itens podem ser
+    diferentes.
+
+
+--------------------------------------------------------------
+4. COMO ATUALIZAR (F5)
+--------------------------------------------------------------
+
+  - Aperte F5 no navegador para buscar os dados mais recentes.
+  - O contador so consulta o ranking quando a pagina e aberta
+    ou quando voce aperta F5. Ele nao consulta nada sozinho.
+  - Cada consulta aparece registrada na janela preta, assim:
+        [17:10:32] Consultando API (semana: atual, nome: FizzKoko)
+  - Lembre que o site do The Classic so atualiza o ranking de
+    tempos em tempos. Se o horario de "Ranking atualizado pelo
+    servidor" nao mudou, os numeros tambem nao vao mudar.
+    Nao adianta apertar F5 varias vezes seguidas.
+
+
+--------------------------------------------------------------
+5. COMO USAR O FILTRO DE SEMANA
+--------------------------------------------------------------
+
+  1) No topo da pagina, clique na caixa "Semana".
+  2) Escolha uma opcao:
+       - "Semana atual": a semana em andamento, que ainda esta
+         mudando (vai de segunda a domingo).
+       - "Semana 39/2026", "Semana 38/2026" etc.: semanas ja
+         fechadas, com o resultado final.
+  3) A pagina recarrega sozinha mostrando a semana escolhida.
+  4) Apertar F5 consulta de novo a semana que esta selecionada.
+  5) Para voltar, escolha "Semana atual" no filtro.
+
+  Obs.: da semana 36 para tras, o personagem aparecia com o
+  nome "Khaidron". O contador ja procura pelos dois nomes
+  automaticamente.
+
+  Se aparecer "Personagem nao encontrado no ranking desta
+  semana", ele nao teve drops registrados naquela semana.
+
+
+--------------------------------------------------------------
+6. COMO CONFERIR OS VALORES
+--------------------------------------------------------------
+
+  Opcao A - Direto na API (os dados brutos):
+    Abra no navegador:
+    https://ranking.theclassic.games/index.php?__route=api/entries&game=pw126&ranking=dusk&period=weekly&ref=&page=1&q=FizzKoko&class=&sort=position&dir=asc
+
+    Procure o trecho "extra":{"items":{ ... }}. Cada par
+    "ID": quantidade deve bater com a tabela do contador.
+    Exemplo: "15284": 10  =  Coracao Ardente do Lacaio Maligno: 10
+
+    Para uma semana fechada, troque "ref=" por "ref=2026-W39"
+    (ou a semana desejada). Da semana 36 para tras, troque
+    tambem "q=FizzKoko" por "q=Khaidron".
+
+  Opcao B - No site oficial:
+    https://ranking.theclassic.games/pw126/dusk
+    Selecione "Semanal" e procure o FizzKoko. Posicao e Pontos
+    devem ser os mesmos do contador.
+
+
+--------------------------------------------------------------
+7. COMO ENCERRAR
+--------------------------------------------------------------
+
+  - Feche a janela preta, ou clique nela e aperte Ctrl+C.
+  - Depois disso, a pagina no navegador para de atualizar.
+  - Para usar de novo, e so dar dois cliques no iniciar.bat.
+
+
+--------------------------------------------------------------
+8. PROBLEMAS COMUNS
+--------------------------------------------------------------
+
+  "Nao consegui abrir a porta 8765"
+    O contador ja esta aberto em outra janela preta. Feche a
+    janela antiga e execute o iniciar.bat de novo.
+
+  Aviso amarelo de erro na pagina
+    A consulta ao ranking falhou (internet, site fora do ar etc.).
+    A pagina mostra o ultimo resultado obtido. Aperte F5 para
+    tentar de novo.
+
+  A pagina nao abre (localhost recusou a conexao)
+    A janela preta foi fechada. Execute o iniciar.bat de novo.
+
+  O personagem mudou de nome
+    Abra o contador.ps1 no Bloco de Notas e adicione o nome novo
+    na linha:
+        $Nomes = @('FizzKoko', 'Khaidron')
+    Exemplo:
+        $Nomes = @('NomeNovo', 'FizzKoko', 'Khaidron')
+    Salve e execute o iniciar.bat de novo.
+
+==============================================================
