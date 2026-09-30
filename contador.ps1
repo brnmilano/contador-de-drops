@@ -6,7 +6,8 @@
 
 $Porta     = 8765
 $EntityId  = '434529'                  # ID do personagem no ranking
-$Nomes     = @('FizzKoko', 'Khaidron') # nomes que ele já usou
+$Nomes     = @('CadeMeuRed?', 'FizzKoko', 'Khaidron') # nome atual primeiro, depois os antigos
+# Se o personagem trocar de nome, o contador descobre o nome novo sozinho pelo ID.
 
 # Mostra qualquer erro inesperado em vez de fechar a janela
 trap {
@@ -120,6 +121,22 @@ function Buscar-Api([string]$ref, [string]$q) {
     } finally { $wc.Dispose() }
 }
 
+# Descobre o nome atual do personagem pela página de perfil (usa o ID)
+$script:PerfilConsultado = $false
+function Descobrir-Nome {
+    $url = "https://ranking.theclassic.games/player/pw126/$EntityId"
+    $wc = New-Object System.Net.WebClient
+    $wc.Encoding = [System.Text.Encoding]::UTF8
+    $wc.Headers.Add('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36')
+    try {
+        Write-Host ("[{0:HH:mm:ss}] Procurando o nome atual pelo ID {1}" -f (Get-Date), $EntityId)
+        $html = $wc.DownloadString($url)
+        $m = [regex]::Match($html, '<title>\s*(.*?)\s+—\s+PW')
+        if ($m.Success) { return [System.Net.WebUtility]::HtmlDecode($m.Groups[1].Value).Trim() }
+        return $null
+    } finally { $wc.Dispose() }
+}
+
 function Obter-Semana([string]$ref) {
     # Consulta a API a cada carregamento da página (ao abrir ou apertar F5).
     # O último resultado fica guardado só para ser exibido se a consulta falhar.
@@ -130,6 +147,18 @@ function Obter-Semana([string]$ref) {
             $dados = (Buscar-Api $ref $n).data
             $linha = $dados.rows | Where-Object { "$($_.entity_id)" -eq $EntityId } | Select-Object -First 1
             if ($linha) { break }
+        }
+        # Não achou por nenhum nome conhecido: talvez ele tenha trocado de nome.
+        # Consulta o perfil (no máximo uma vez enquanto o contador estiver aberto).
+        if (-not $linha -and -not $script:PerfilConsultado) {
+            $script:PerfilConsultado = $true
+            $atual = Descobrir-Nome
+            if ($atual -and ($Nomes -notcontains $atual)) {
+                Write-Host "  Nome novo detectado: $atual" -ForegroundColor Green
+                $script:Nomes = @($atual) + $Nomes
+                $dados = (Buscar-Api $ref $atual).data
+                $linha = $dados.rows | Where-Object { "$($_.entity_id)" -eq $EntityId } | Select-Object -First 1
+            }
         }
         $novo = @{ Hora = Get-Date; Dados = $dados; Linha = $linha; Erro = $null }
         $Cache[$ref] = $novo

@@ -30,12 +30,14 @@ O personagem está configurado no início do `contador.ps1`. Abra o arquivo no B
 
 ```powershell
 $EntityId  = '434529'                  # ID do personagem no ranking
-$Nomes     = @('FizzKoko', 'Khaidron') # nomes que ele já usou
+$Nomes     = @('CadeMeuRed?', 'FizzKoko', 'Khaidron') # nome atual primeiro, depois os antigos
 ```
 
 Para descobrir o ID de um personagem, abra o perfil dele no site do ranking. O número no final do endereço é o ID. Por exemplo, em `https://ranking.theclassic.games/player/pw126/434529`, o ID é `434529`.
 
 Em `$Nomes`, coloque o nome atual do personagem e, se ele já trocou de nome, os nomes antigos. O script procura por eles para encontrar as semanas anteriores.
+
+Se o personagem trocar de nome depois, não precisa editar nada: quando o contador não o encontra pelos nomes conhecidos, ele consulta o perfil pelo ID e descobre o nome novo sozinho.
 
 Os arquivos `drops_fizzkoko.html` e `fizzkoko_dusk_semanal.json` são um retrato fixo do histórico do FizzKoko e não mudam com essa configuração.
 
