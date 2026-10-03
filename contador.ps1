@@ -5,9 +5,16 @@
 # ============================================================
 
 $Porta     = 8765
-$EntityId  = '434529'                  # ID do personagem no ranking
-$Nomes     = @('CadeMeuRed?', 'FizzKoko', 'Khaidron') # nome atual primeiro, depois os antigos
-# Se o personagem trocar de nome, o contador descobre o nome novo sozinho pelo ID.
+
+# Personagens acompanhados: um por coluna, na ordem em que aparecem na tela.
+#   Titulo = nome mostrado no topo da coluna (pode ser um apelido)
+#   Id     = ID do personagem no ranking (o número no fim do endereço do perfil)
+#   Nomes  = nomes do personagem no jogo: o atual primeiro, depois os antigos
+# Se um personagem trocar de nome, o contador descobre o nome novo sozinho pelo ID.
+$Personagens = @(
+    @{ Titulo = 'Monarca'; Id = '434529'; Nomes = @('CadeMeuRed?', 'FizzKoko', 'Khaidron') }
+    @{ Titulo = 'Gabriel'; Id = '921824'; Nomes = @('MrSantana') }
+)
 
 # Mostra qualquer erro inesperado em vez de fechar a janela
 trap {
@@ -121,15 +128,14 @@ function Buscar-Api([string]$ref, [string]$q) {
     } finally { $wc.Dispose() }
 }
 
-# Descobre o nome atual do personagem pela página de perfil (usa o ID)
-$script:PerfilConsultado = $false
-function Descobrir-Nome {
-    $url = "https://ranking.theclassic.games/player/pw126/$EntityId"
+# Descobre o nome atual de um personagem pela página de perfil (usa o ID)
+function Descobrir-Nome([string]$id) {
+    $url = "https://ranking.theclassic.games/player/pw126/$id"
     $wc = New-Object System.Net.WebClient
     $wc.Encoding = [System.Text.Encoding]::UTF8
     $wc.Headers.Add('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36')
     try {
-        Write-Host ("[{0:HH:mm:ss}] Procurando o nome atual pelo ID {1}" -f (Get-Date), $EntityId)
+        Write-Host ("[{0:HH:mm:ss}] Procurando o nome atual pelo ID {1}" -f (Get-Date), $id)
         $html = $wc.DownloadString($url)
         $m = [regex]::Match($html, '<title>\s*(.*?)\s+—\s+PW')
         if ($m.Success) { return [System.Net.WebUtility]::HtmlDecode($m.Groups[1].Value).Trim() }
@@ -137,31 +143,36 @@ function Descobrir-Nome {
     } finally { $wc.Dispose() }
 }
 
-function Obter-Semana([string]$ref) {
+function Achar-Linha($dados, [string]$id) {
+    return ($dados.rows | Where-Object { "$($_.entity_id)" -eq $id } | Select-Object -First 1)
+}
+
+function Obter-Semana($p, [string]$ref) {
     # Consulta a API a cada carregamento da página (ao abrir ou apertar F5).
     # O último resultado fica guardado só para ser exibido se a consulta falhar.
-    $c = $Cache[$ref]
+    $chave = "$($p.Id)|$ref"
+    $c = $Cache[$chave]
     try {
         $dados = $null; $linha = $null
-        foreach ($n in $Nomes) {
+        foreach ($n in $p.Nomes) {
             $dados = (Buscar-Api $ref $n).data
-            $linha = $dados.rows | Where-Object { "$($_.entity_id)" -eq $EntityId } | Select-Object -First 1
+            $linha = Achar-Linha $dados $p.Id
             if ($linha) { break }
         }
         # Não achou por nenhum nome conhecido: talvez ele tenha trocado de nome.
-        # Consulta o perfil (no máximo uma vez enquanto o contador estiver aberto).
-        if (-not $linha -and -not $script:PerfilConsultado) {
-            $script:PerfilConsultado = $true
-            $atual = Descobrir-Nome
-            if ($atual -and ($Nomes -notcontains $atual)) {
+        # Consulta o perfil (no máximo uma vez por personagem enquanto o contador estiver aberto).
+        if (-not $linha -and -not $p.PerfilConsultado) {
+            $p.PerfilConsultado = $true
+            $atual = Descobrir-Nome $p.Id
+            if ($atual -and ($p.Nomes -notcontains $atual)) {
                 Write-Host "  Nome novo detectado: $atual" -ForegroundColor Green
-                $script:Nomes = @($atual) + $Nomes
+                $p.Nomes = @($atual) + $p.Nomes
                 $dados = (Buscar-Api $ref $atual).data
-                $linha = $dados.rows | Where-Object { "$($_.entity_id)" -eq $EntityId } | Select-Object -First 1
+                $linha = Achar-Linha $dados $p.Id
             }
         }
         $novo = @{ Hora = Get-Date; Dados = $dados; Linha = $linha; Erro = $null }
-        $Cache[$ref] = $novo
+        $Cache[$chave] = $novo
         return $novo
     } catch {
         $msg = $_.Exception.Message
@@ -173,49 +184,18 @@ function Obter-Semana([string]$ref) {
 
 function Esc($s) { [System.Net.WebUtility]::HtmlEncode("$s") }
 
-function Montar-Pagina([string]$ref) {
-    $r = Obter-Semana $ref
-    $sb = New-Object System.Text.StringBuilder
-    [void]$sb.Append(@'
-<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark">
-<title>Contador de drops</title>
-<style>
-  html, body { background: #000; }
-  body { font-family: Arial, sans-serif; max-width: 640px; margin: 24px auto; padding: 0 16px; color: #fff; }
-  .aviso { background: #1a1a1a; border: 1px solid #555; padding: 8px 12px; border-radius: 4px; font-size: 16px; }
-  table { border-collapse: collapse; margin-top: 16px; font-size: 20px; }
-  th, td { text-align: left; padding: 4px 0; }
-  td.qtd, th.qtd { text-align: right; font-weight: bold; padding-left: 24px; }
-  .bolinha { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 10px; vertical-align: middle; }
-  .bolinha.gold { background: #f5c542; }
-  .bolinha.red { background: #ff4d4d; }
-  select { font-size: 18px; padding: 4px 8px; background: #000; color: #fff; border: 1px solid #555; border-radius: 4px; }
-  label { font-size: 18px; }
-</style></head><body>
-'@)
-
-    # Filtro de semana
-    [void]$sb.Append('<label>Semana: <select onchange="location.href=''/?ref=''+this.value">')
-    $sel = if ($ref -eq '') { ' selected' } else { '' }
-    [void]$sb.Append("<option value=''$sel>Semana atual</option>")
-    $refs = if ($r.Dados) { $r.Dados.refs } elseif ($Cache['']) { $Cache[''].Dados.refs } else { @() }
-    foreach ($x in $refs) {
-        $sel = if ($x.ref -eq $ref) { ' selected' } else { '' }
-        [void]$sb.Append("<option value='$(Esc $x.ref)'$sel>$(Esc $x.label)</option>")
-    }
-    [void]$sb.Append('</select></label>')
-
+# Monta a coluna de um personagem: nome no topo e a lista de itens raros
+function Montar-Coluna($sb, $p, $r) {
+    $l = $r.Linha
+    $titulo = if ($p.Titulo) { $p.Titulo } elseif ($l -and $l.name) { $l.name } else { $p.Nomes[0] }
+    [void]$sb.Append("<section class='coluna'><h2>$(Esc $titulo)</h2>")
 
     if ($r.Erro) {
         [void]$sb.Append("<p class='aviso'>Não consegui consultar a API agora ($(Esc $r.Erro)). ")
-        if ($r.Linha) { [void]$sb.Append('Mostrando o último resultado obtido.') }
+        if ($l) { [void]$sb.Append('Mostrando o último resultado obtido.') }
         [void]$sb.Append('</p>')
     }
 
-    $l = $r.Linha
     if (-not $l) {
         if (-not $r.Erro) { [void]$sb.Append('<p class="aviso">Personagem não encontrado no ranking desta semana.</p>') }
     } else {
@@ -225,9 +205,8 @@ function Montar-Pagina([string]$ref) {
                 [pscustomobject]@{ Id = [int]$_.Name; Qtd = [int]$_.Value }
             } | Sort-Object Qtd -Descending
         }
-        $lista = @($lista)
         # Mostra somente os itens raros (gold e red)
-        $lista = @($lista | Where-Object { $Raros.ContainsKey($_.Id) })
+        $lista = @(@($lista) | Where-Object { $Raros.ContainsKey($_.Id) })
 
         if ($lista.Count -eq 0) {
             [void]$sb.Append('<p>Nenhum item gold ou red nesta semana.</p>')
@@ -241,7 +220,61 @@ function Montar-Pagina([string]$ref) {
             [void]$sb.Append('</table>')
         }
     }
-    [void]$sb.Append('</body></html>')
+    [void]$sb.Append('</section>')
+}
+
+function Montar-Pagina([string]$ref) {
+    # Uma consulta por personagem
+    $resultados = @()
+    foreach ($p in $Personagens) { $resultados += ,@{ P = $p; R = (Obter-Semana $p $ref) } }
+
+    $sb = New-Object System.Text.StringBuilder
+    [void]$sb.Append(@'
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Contador de drops</title>
+<style>
+  html, body { background: #000; }
+  body { font-family: Arial, sans-serif; margin: 24px; color: #fff; }
+  .grid { display: grid; grid-template-columns: max-content max-content; justify-content: start; margin-top: 24px; }
+  .coluna { padding: 0 24px; min-width: 0; }
+  .coluna:first-child { padding-left: 0; }
+  .coluna + .coluna { border-left: 1px solid #333; }
+  h2 { font-size: 24px; margin: 0 0 8px; }
+  .aviso { background: #1a1a1a; border: 1px solid #555; padding: 8px 12px; border-radius: 4px; font-size: 16px; }
+  table { border-collapse: collapse; margin-top: 16px; font-size: 20px; }
+  th, td { text-align: left; padding: 4px 0; }
+  td.qtd, th.qtd { text-align: right; font-weight: bold; padding-left: 24px; }
+  .bolinha { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 10px; vertical-align: middle; }
+  .bolinha.gold { background: #f5c542; }
+  .bolinha.red { background: #ff4d4d; }
+  select { font-size: 18px; padding: 4px 8px; background: #000; color: #fff; border: 1px solid #555; border-radius: 4px; }
+  label { font-size: 18px; }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+    .coluna { padding: 0; }
+    .coluna + .coluna { border-left: 0; border-top: 1px solid #333; margin-top: 24px; padding-top: 24px; }
+  }
+</style></head><body>
+'@)
+
+    # Filtro de semana (vale para as duas colunas)
+    [void]$sb.Append('<label>Semana: <select onchange="location.href=''/?ref=''+this.value">')
+    $sel = if ($ref -eq '') { ' selected' } else { '' }
+    [void]$sb.Append("<option value=''$sel>Semana atual</option>")
+    $refs = @()
+    foreach ($x in $resultados) { if ($x.R.Dados -and $x.R.Dados.refs) { $refs = $x.R.Dados.refs; break } }
+    foreach ($x in $refs) {
+        $sel = if ($x.ref -eq $ref) { ' selected' } else { '' }
+        [void]$sb.Append("<option value='$(Esc $x.ref)'$sel>$(Esc $x.label)</option>")
+    }
+    [void]$sb.Append('</select></label>')
+
+    [void]$sb.Append('<div class="grid">')
+    foreach ($x in $resultados) { Montar-Coluna $sb $x.P $x.R }
+    [void]$sb.Append('</div></body></html>')
     return $sb.ToString()
 }
 
